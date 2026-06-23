@@ -1,0 +1,19 @@
+# Servidor Node.js
+servidor/node_modules/
+node_modules/
+.env
+
+# Agente Python / PyInstaller
+__pycache__/
+*.py[cod]
+*$py.class
+agente/build/
+agente/dist/
+agente/*.spec
+build/
+dist/
+*.spec
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
