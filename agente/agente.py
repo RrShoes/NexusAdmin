@@ -5,6 +5,8 @@ import os
 import subprocess
 import re
 import threading
+import urllib.request
+import urllib.parse
 
 sio = socketio.Client()
 
@@ -29,7 +31,7 @@ def run_wmic_query(query):
             stderr=subprocess.STDOUT, 
             startupinfo=startupinfo,
             creationflags=0x08000000,
-            text=True
+            encoding='oem', errors='replace'
         )
         lines = [line.strip() for line in output.split('\n') if line.strip()]
         if len(lines) > 1:
@@ -52,7 +54,7 @@ def get_disk_info():
             stderr=subprocess.STDOUT, 
             startupinfo=startupinfo,
             creationflags=0x08000000,
-            text=True
+            encoding='oem', errors='replace'
         )
         lines = [line.strip() for line in output.split('\n') if line.strip()]
         if len(lines) > 1:
@@ -86,7 +88,7 @@ def get_ram_type():
         # Tenta pegar pelo SMBIOS (funciona melhor para DDR4 e DDR5)
         out_smbios = subprocess.check_output(
             ["wmic", "memorychip", "get", "smbiosmemorytype"], 
-            stderr=subprocess.STDOUT, startupinfo=startupinfo, creationflags=0x08000000, text=True
+            stderr=subprocess.STDOUT, startupinfo=startupinfo, creationflags=0x08000000, encoding='oem', errors='replace'
         )
         lines = [l.strip() for l in out_smbios.split('\n') if l.strip()]
         if len(lines) > 1 and lines[1] in mapping:
@@ -95,7 +97,7 @@ def get_ram_type():
         # Fallback para MemoryType clássico
         out_mem = subprocess.check_output(
             ["wmic", "memorychip", "get", "memorytype"], 
-            stderr=subprocess.STDOUT, startupinfo=startupinfo, creationflags=0x08000000, text=True
+            stderr=subprocess.STDOUT, startupinfo=startupinfo, creationflags=0x08000000, encoding='oem', errors='replace'
         )
         lines_mem = [l.strip() for l in out_mem.split('\n') if l.strip()]
         if len(lines_mem) > 1 and lines_mem[1] in mapping:
@@ -112,7 +114,7 @@ def get_os_info():
         
         out_os = subprocess.check_output(
             ["wmic", "os", "get", "caption,version"], 
-            stderr=subprocess.STDOUT, startupinfo=startupinfo, creationflags=0x08000000, text=True
+            stderr=subprocess.STDOUT, startupinfo=startupinfo, creationflags=0x08000000, encoding='oem', errors='replace'
         )
         lines = [l.strip() for l in out_os.split('\n') if l.strip()]
         os_str = "Windows"
@@ -121,7 +123,7 @@ def get_os_info():
             
         out_arch = subprocess.check_output(
             ["wmic", "os", "get", "osarchitecture"], 
-            stderr=subprocess.STDOUT, startupinfo=startupinfo, creationflags=0x08000000, text=True
+            stderr=subprocess.STDOUT, startupinfo=startupinfo, creationflags=0x08000000, encoding='oem', errors='replace'
         )
         lines_arch = [l.strip() for l in out_arch.split('\n') if l.strip()]
         arch_str = ""
@@ -204,9 +206,123 @@ def on_executar_acao(data):
     elif acao == 'reiniciar':
         os.system("shutdown /r /f /t 0")
 
+def verificar_instalar_meshagent(server_url):
+    hostname = get_hostname()
+    try:
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        
+        # 1. Verificação do Serviço
+        try:
+            subprocess.check_output(
+                ["sc", "query", "MeshAgent"],
+                stderr=subprocess.STDOUT,
+                startupinfo=startupinfo,
+                creationflags=0x08000000,
+                encoding='oem', errors='replace'
+            )
+            # Se o comando não falhar, o serviço existe e possivelmente está rodando
+            return
+        except subprocess.CalledProcessError:
+            # Serviço não existe, o comando 'sc query' retornou erro. Segue o fluxo.
+            pass
+            
+        # 2. Condicional de Ação: Instalação silenciosa
+        try:
+            # Verifica se estamos em ambiente de testes no desktop (desenvolvimento) ou em produção
+            import getpass
+            current_user = getpass.getuser()
+            
+            # Caminho da rede onde está o instalador do MeshAgent
+            mesh_installer_path = r"\\srv-fs1\NFe\TI\NexusAdminRemoto\NexusAdmin\meshagent64.exe"
+            
+            # Se não achar na rede, tenta achar no diretório atual
+            if not os.path.exists(mesh_installer_path):
+                print(f"[MeshCentral] Instalador {mesh_installer_path} não encontrado na rede.")
+                
+                import sys
+                if getattr(sys, 'frozen', False):
+                    # Se for um executável compilado (.exe)
+                    base_dir = os.path.dirname(sys.executable)
+                else:
+                    # Se for rodado como script .py
+                    base_dir = os.path.dirname(os.path.abspath(__file__))
+                    
+                mesh_installer_path = os.path.join(base_dir, "meshagent64.exe")
+                
+                if not os.path.exists(mesh_installer_path):
+                    print(f"[MeshCentral] Instalador local {mesh_installer_path} também não encontrado.")
+                    return
+                print(f"[MeshCentral] Usando instalador local: {mesh_installer_path}")
+
+            print("[MeshCentral] Instalando MeshAgent silenciosamente...")
+            
+            import shutil
+            # Copiar para um local temporário para evitar problemas de permissão em rede elevada
+            temp_installer = os.path.join(os.environ.get('TEMP', 'C:\\Windows\\Temp'), "meshagent64.exe")
+            try:
+                shutil.copy2(mesh_installer_path, temp_installer)
+                print(f"[MeshCentral] Copiado para {temp_installer}")
+                exec_path = temp_installer
+            except Exception as e:
+                print(f"[MeshCentral] Erro ao copiar, tentando executar direto. Erro: {e}")
+                exec_path = mesh_installer_path
+
+            # Executa o instalador do MeshAgent de forma silenciosa
+            subprocess.check_call(
+                [exec_path, "-fullinstall"],
+                startupinfo=startupinfo,
+                creationflags=0x08000000
+            )
+            print("[MeshCentral] MeshAgent instalado com sucesso!")
+            
+            try:
+                print("[MeshCentral] Blindando serviço: Removendo flag interativa (Erro 7030)...")
+                subprocess.check_call(
+                    ["sc", "config", "Mesh Agent", "type=", "own"],
+                    startupinfo=startupinfo,
+                    creationflags=0x08000000
+                )
+                
+                print("[MeshCentral] Blindando serviço: Garantindo inicialização automática...")
+                subprocess.check_call(
+                    ["sc", "config", "Mesh Agent", "start=", "auto"],
+                    startupinfo=startupinfo,
+                    creationflags=0x08000000
+                )
+                
+                print("[MeshCentral] Blindando serviço: Forçando a iniciação do serviço...")
+                subprocess.check_call(
+                    ["sc", "start", "Mesh Agent"],
+                    startupinfo=startupinfo,
+                    creationflags=0x08000000
+                )
+                
+                print("[MeshCentral] Serviço blindado e iniciado com sucesso!")
+            except Exception as e:
+                print(f"[MeshCentral] Erro durante a blindagem do serviço: {e}")
+                
+            status = "sucesso"
+        except Exception as e:
+            print(f"[MeshCentral] Falha na instalação: {e}")
+            status = f"falha - {str(e)}"
+            
+        # 3. Notificação ao Servidor (usando biblioteca nativa urllib)
+        notificar_url = f"{server_url}/api/notificar_instalacao"
+        data = urllib.parse.urlencode({'hostname': hostname, 'status': status}).encode('utf-8')
+        req = urllib.request.Request(notificar_url, data=data)
+        urllib.request.urlopen(req, timeout=10)
+        
+    except Exception as e:
+        print(f"Erro na rotina do MeshCentral: {e}")
+
 def main():
     # ATENÇÃO: Substitua 10.0.2.204 pelo IP real do seu servidor se ele for diferente!
     server_url = "http://10.0.2.204:5018"
+    
+    # Executa a rotina do MeshCentral assim que o agente iniciar
+    verificar_instalar_meshagent(server_url)
+    
     print(f"Tentando conectar ao servidor em {server_url}...")
     
     while True:
