@@ -47,6 +47,13 @@
                 <div class="topbar-title" id="topbar-title">Dashboard</div>
                 <div class="topbar-sub" id="topbar-sub">Visão geral da rede</div>
             </div>
+            
+            <!-- Ações específicas da view Monitoramento -->
+            <div id="topbar-actions-monitoring" style="display: none; gap: 10px; align-items: center;">
+                <input type="text" id="search-monitoring" placeholder="Pesquisar (Nome, IP, Usuário...)" style="padding: 8px 12px; border: 1px solid var(--border-strong); border-radius: 8px; background: #FFFFFF; color: var(--text-main); font-size: 0.85rem; outline: none; width: 250px; font-family: inherit; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);" oninput="renderTable()">
+                <button class="btn-toggle" id="btn-toggle-hw" onclick="toggleHardware()" style="padding: 6px 12px; font-size: 0.85rem;">⚙️ Mostrar Hardware</button>
+                <button class="btn-primary" onclick="exportarParaExcel()" style="padding: 6px 12px; font-size: 0.85rem;">📊 Exportar Excel</button>
+            </div>
         </div>
 
         <div class="page-content">
@@ -88,13 +95,6 @@
 
             <!-- VIEW: MONITORAMENTO -->
             <div class="view" id="view-monitoring">
-                <div class="table-toolbar">
-                    <div class="section-title" style="margin-bottom:0;">📋 Tabela de Dispositivos</div>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="btn-toggle" id="btn-toggle-hw" onclick="toggleHardware()">⚙️ Mostrar Hardware</button>
-                        <button class="btn-primary" onclick="exportarParaExcel()" style="padding: 6px 12px; font-size: 0.85rem;">📊 Exportar Excel</button>
-                    </div>
-                </div>
                 <div class="table-wrapper">
                     <table>
                         <thead>
@@ -246,6 +246,12 @@
             document.getElementById('nav-' + view).classList.add('active');
             document.getElementById('topbar-title').innerText = titulos[view][0];
             document.getElementById('topbar-sub').innerText = titulos[view][1];
+
+            // Mostrar/Esconder ações do topbar dependendo da aba
+            const actionsMonitoring = document.getElementById('topbar-actions-monitoring');
+            if (actionsMonitoring) {
+                actionsMonitoring.style.display = (view === 'monitoring') ? 'flex' : 'none';
+            }
         }
 
         // ── HOME: CARDS ──
@@ -266,7 +272,7 @@
                 return;
             }
             grid.innerHTML = todosComputadores.map(pc => `
-                <div class="device-card">
+                <div class="device-card" style="cursor: pointer;" onclick="abrirDetalhesPC('${pc.hostname}')">
                     <div class="device-card-header">
                         <div class="device-name">${pc.hostname || 'Desconhecido'}</div>
                         <span class="badge ${pc.status === 'online' ? 'badge-online' : 'badge-offline'}">${pc.status === 'online' ? '● Online' : '● Offline'}</span>
@@ -285,12 +291,34 @@
         // ── TABELA: MONITORAMENTO ──
         function renderTable() {
             const tbody = document.getElementById('lista-pcs');
+            const searchInput = document.getElementById('search-monitoring');
+            const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+
             if (todosComputadores.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="13" class="empty-message">Aguardando conexão de agentes...</td></tr>';
                 return;
             }
+
+            let pcsFiltrados = todosComputadores;
+            if (searchTerm) {
+                pcsFiltrados = todosComputadores.filter(pc => {
+                    return (
+                        (pc.hostname && pc.hostname.toLowerCase().includes(searchTerm)) ||
+                        (pc.user && pc.user.toLowerCase().includes(searchTerm)) ||
+                        (pc.ip && pc.ip.toLowerCase().includes(searchTerm)) ||
+                        (pc.os && pc.os.toLowerCase().includes(searchTerm)) ||
+                        (pc.chassis && pc.chassis.toLowerCase().includes(searchTerm))
+                    );
+                });
+            }
+
+            if (pcsFiltrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="13" class="empty-message">Nenhum dispositivo encontrado...</td></tr>';
+                return;
+            }
+
             tbody.innerHTML = '';
-            todosComputadores.forEach(pc => {
+            pcsFiltrados.forEach(pc => {
                 const statusIcon = pc.status === 'online'
                     ? '<span style="color:#10b981;font-size:36px;text-shadow:0 0 5px #10b981;" title="Online">●</span>'
                     : '<span style="color:#ef4444;font-size:36px;" title="Offline">●</span>';
@@ -403,6 +431,7 @@
             }
 
             // Renderizar Lista de Máquinas no Modal
+            if (document.getElementById('modal-config-setores').classList.contains('open')) return;
             const tbody = document.getElementById('lista-pcs-setores');
             if (tbody) {
                 if (todosComputadores.length === 0) {

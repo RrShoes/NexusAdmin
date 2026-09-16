@@ -1,0 +1,31 @@
+<service>
+	<id>nexusadminserver.exe</id>
+	<name>NexusAdminServer</name>
+	<description>Servidor do Centro de Monitoramento de PC via Uno (NexusAdmin)</description>
+	<executable>C:\Program Files\nodejs\node.exe</executable>
+	<argument>--harmony</argument>
+	<argument>C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js</argument>
+	<argument>--file</argument>
+	<argument>C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js</argument>
+	<argument>--scriptoptions=</argument>
+	<argument>--log</argument>
+	<argument>NexusAdminServer wrapper</argument>
+	<argument>--grow</argument>
+	<argument>0.5</argument>
+	<argument>--wait</argument>
+	<argument>2</argument>
+	<argument>--maxrestarts</argument>
+	<argument>3</argument>
+	<argument>--abortonerror</argument>
+	<argument>n</argument>
+	<argument>--stopparentfirst</argument>
+	<argument>undefined</argument>
+	<logmode>rotate</logmode>
+	<stoptimeout>30sec</stoptimeout>
+	<serviceaccount>
+		<domain>PC_002115_2026</domain>
+		<user>LocalSystem</user>
+		<password></password>
+	</serviceaccount>
+	<workingdirectory>C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor</workingdirectory>
+</service>

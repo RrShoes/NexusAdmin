@@ -4,10 +4,15 @@
   "description": "Servidor do NexusAdmin",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "service:install": "node winservice.js --install",
+    "service:uninstall": "node winservice.js --uninstall",
+    "service:start": "node winservice.js --start",
+    "service:stop": "node winservice.js --stop"
   },
   "dependencies": {
     "express": "^4.19.0",
+    "node-windows": "^1.0.0-beta.8",
     "socket.io": "^4.7.0",
     "sqlite3": "^6.0.1"
   }

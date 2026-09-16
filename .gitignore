@@ -17,3 +17,8 @@ dist/
 # Sistema Operacional
 .DS_Store
 Thumbs.db
+
+# Arquivos Gerados/Temporarios
+*.sqlite
+*.sqlite-journal
+*.exe

@@ -1,0 +1,294 @@
+2026-07-08 16:09:17 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-07-08 16:09:17 - Started 17772
+2026-07-13 01:00:10 - Stopping nexusadminserver.exe
+2026-07-13 01:00:10 - ProcessKill 17772
+2026-07-13 01:00:10 - Shutdown exception
+Message:O sistema está sendo desligado.
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-07-13 01:00:58 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-07-13 01:00:58 - Started 5684
+2026-07-14 07:05:33 - Stopping nexusadminserver.exe
+2026-07-14 07:05:33 - ProcessKill 5684
+2026-07-14 07:05:33 - Shutdown exception
+Message:Classe não registrada
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-07-14 07:06:02 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-07-14 07:06:02 - Started 4812
+2026-07-17 07:34:30 - Stopping nexusadminserver.exe
+2026-07-17 07:34:30 - ProcessKill 4812
+2026-07-17 07:34:30 - Found child process: 5532 Name: conhost.exe
+2026-07-17 07:34:30 - Found child process: 6300 Name: node.exe
+2026-07-17 07:34:30 - Stopping process 5532
+2026-07-17 07:34:30 - Send SIGINT 5532
+2026-07-17 07:34:30 - SIGINT to 5532 failed - Killing as fallback
+2026-07-17 07:34:30 - Stopping process 6300
+2026-07-17 07:34:30 - Send SIGINT 6300
+2026-07-17 07:34:30 - SIGINT to 6300 failed - Killing as fallback
+2026-07-17 07:34:30 - Stopping process 4812
+2026-07-17 07:34:30 - Send SIGINT 4812
+2026-07-17 07:34:30 - SIGINT to 4812 failed - Killing as fallback
+2026-07-17 07:34:30 - Finished nexusadminserver.exe
+2026-07-17 07:34:31 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-07-17 07:34:31 - Started 45816
+2026-07-20 01:00:21 - Stopping nexusadminserver.exe
+2026-07-20 01:00:21 - ProcessKill 45816
+2026-07-20 01:00:21 - Shutdown exception
+Message:Classe não registrada
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-07-20 01:00:47 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-07-20 01:00:47 - Started 5816
+2026-07-21 18:37:16 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-07-21 18:37:17 - Started 6004
+2026-07-27 01:00:40 - Stopping nexusadminserver.exe
+2026-07-27 01:00:40 - ProcessKill 6004
+2026-07-27 01:00:41 - Shutdown exception
+Message:O sistema está sendo desligado.
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-07-27 01:01:13 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-07-27 01:01:13 - Started 5364
+2026-07-28 09:52:21 - Stopping nexusadminserver.exe
+2026-07-28 09:52:21 - ProcessKill 5364
+2026-07-28 09:52:21 - Found child process: 5576 Name: conhost.exe
+2026-07-28 09:52:21 - Found child process: 13052 Name: node.exe
+2026-07-28 09:52:21 - Stopping process 5576
+2026-07-28 09:52:21 - Send SIGINT 5576
+2026-07-28 09:52:21 - SIGINT to 5576 failed - Killing as fallback
+2026-07-28 09:52:21 - Stopping process 13052
+2026-07-28 09:52:21 - Send SIGINT 13052
+2026-07-28 09:52:21 - SIGINT to 13052 failed - Killing as fallback
+2026-07-28 09:52:21 - Stopping process 5364
+2026-07-28 09:52:21 - Send SIGINT 5364
+2026-07-28 09:52:21 - SIGINT to 5364 failed - Killing as fallback
+2026-07-28 09:52:21 - Finished nexusadminserver.exe
+2026-07-28 09:52:22 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-07-28 09:52:22 - Started 23008
+2026-08-03 01:00:23 - Stopping nexusadminserver.exe
+2026-08-03 01:00:23 - ProcessKill 23008
+2026-08-03 01:00:23 - Shutdown exception
+Message:Classe não registrada
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-08-03 01:01:08 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-03 01:01:08 - Started 6020
+                                                                                                                                                                                                                                                                                                                                                                                                                                                             2026-08-07 09:36:22 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-07 09:36:23 - Started 5696
+2026-08-10 01:00:25 - Stopping nexusadminserver.exe
+2026-08-10 01:00:25 - ProcessKill 5696
+2026-08-10 01:00:25 - Shutdown exception
+Message:O sistema está sendo desligado.
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-08-10 01:01:00 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-10 01:01:00 - Started 6040
+2026-08-12 14:14:41 - Stopping nexusadminserver.exe
+2026-08-12 14:14:41 - ProcessKill 6040
+2026-08-12 14:14:42 - Shutdown exception
+Message:Classe não registrada
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-08-12 14:15:13 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-12 14:15:13 - Started 5068
+2026-08-13 15:37:02 - Stopping nexusadminserver.exe
+2026-08-13 15:37:02 - ProcessKill 5068
+2026-08-13 15:37:03 - Found child process: 6152 Name: conhost.exe
+2026-08-13 15:37:03 - Found child process: 5232 Name: node.exe
+2026-08-13 15:37:03 - Stopping process 6152
+2026-08-13 15:37:03 - Send SIGINT 6152
+2026-08-13 15:37:03 - SIGINT to 6152 failed - Killing as fallback
+2026-08-13 15:37:03 - Stopping process 5232
+2026-08-13 15:37:03 - Send SIGINT 5232
+2026-08-13 15:37:03 - SIGINT to 5232 failed - Killing as fallback
+2026-08-13 15:37:03 - Stopping process 5068
+2026-08-13 15:37:03 - Send SIGINT 5068
+2026-08-13 15:37:03 - SIGINT to 5068 failed - Killing as fallback
+2026-08-13 15:37:03 - Finished nexusadminserver.exe
+2026-08-13 15:37:04 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-13 15:37:04 - Started 15500
+2026-08-14 07:46:46 - Stopping nexusadminserver.exe
+2026-08-14 07:46:46 - ProcessKill 15500
+2026-08-14 07:46:47 - Found child process: 17384 Name: conhost.exe
+2026-08-14 07:46:47 - Found child process: 6152 Name: node.exe
+2026-08-14 07:46:47 - Stopping process 17384
+2026-08-14 07:46:47 - Send SIGINT 17384
+2026-08-14 07:46:47 - SIGINT to 17384 failed - Killing as fallback
+2026-08-14 07:46:47 - Stopping process 6152
+2026-08-14 07:46:47 - Send SIGINT 6152
+2026-08-14 07:46:47 - SIGINT to 6152 failed - Killing as fallback
+2026-08-14 07:46:47 - Stopping process 15500
+2026-08-14 07:46:47 - Send SIGINT 15500
+2026-08-14 07:46:47 - SIGINT to 15500 failed - Killing as fallback
+2026-08-14 07:46:47 - Finished nexusadminserver.exe
+2026-08-14 07:46:48 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-14 07:46:48 - Started 34856
+2026-08-17 01:00:14 - Stopping nexusadminserver.exe
+2026-08-17 01:00:14 - ProcessKill 34856
+2026-08-17 01:00:15 - Shutdown exception
+Message:O sistema está sendo desligado.
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-08-17 01:00:52 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-17 01:00:52 - Started 6208
+2026-08-17 08:13:06 - Stopping nexusadminserver.exe
+2026-08-17 08:13:06 - ProcessKill 6208
+2026-08-17 08:13:06 - Found child process: 6248 Name: conhost.exe
+2026-08-17 08:13:06 - Found child process: 6040 Name: node.exe
+2026-08-17 08:13:06 - Stopping process 6248
+2026-08-17 08:13:06 - Send SIGINT 6248
+2026-08-17 08:13:06 - SIGINT to 6248 failed - Killing as fallback
+2026-08-17 08:13:07 - Stopping process 6040
+2026-08-17 08:13:07 - Send SIGINT 6040
+2026-08-17 08:13:07 - SIGINT to 6040 failed - Killing as fallback
+2026-08-17 08:13:07 - Stopping process 6208
+2026-08-17 08:13:07 - Send SIGINT 6208
+2026-08-17 08:13:07 - SIGINT to 6208 failed - Killing as fallback
+2026-08-17 08:13:07 - Finished nexusadminserver.exe
+2026-08-17 08:13:08 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-17 08:13:08 - Started 7676
+2026-08-24 01:00:14 - Stopping nexusadminserver.exe
+2026-08-24 01:00:14 - ProcessKill 7676
+2026-08-24 01:00:14 - Shutdown exception
+Message:O sistema está sendo desligado.
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-08-24 01:00:56 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-24 01:00:56 - Started 6316
+2026-08-31 01:00:23 - Stopping nexusadminserver.exe
+2026-08-31 01:00:23 - ProcessKill 6316
+2026-08-31 01:00:23 - Shutdown exception
+Message:Classe não registrada
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-08-31 01:00:59 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-08-31 01:00:59 - Started 6536
+2026-09-07 01:00:27 - Stopping nexusadminserver.exe
+2026-09-07 01:00:27 - ProcessKill 6536
+2026-09-07 01:00:27 - Shutdown exception
+Message:O sistema está sendo desligado.
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-09-07 01:01:02 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-09-07 01:01:02 - Started 6528
+2026-09-14 01:00:21 - Stopping nexusadminserver.exe
+2026-09-14 01:00:21 - ProcessKill 6528
+2026-09-14 01:00:21 - Shutdown exception
+Message:Classe não registrada
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-09-14 01:00:55 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-09-14 01:00:55 - Started 6988
+2026-09-14 07:50:31 - Stopping nexusadminserver.exe
+2026-09-14 07:50:31 - ProcessKill 6988
+2026-09-14 07:50:31 - Shutdown exception
+Message:O sistema está sendo desligado.
+
+Stacktrace:   em System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   em System.Management.ManagementScope.InitializeGuts(Object o)
+   em System.Management.ManagementScope.Initialize()
+   em System.Management.ManagementObjectSearcher.Initialize()
+   em System.Management.ManagementObjectSearcher.Get()
+   em winsw.WrapperService.GetChildPids(Int32 pid)
+   em winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   em winsw.WrapperService.StopIt()
+   em winsw.WrapperService.OnShutdown()
+2026-09-14 07:51:05 - Starting C:\Program Files\nodejs\node.exe  --harmony C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\node_modules\node-windows\lib\wrapper.js --file C:\Aplicacoes\Centro_de_monitoramento_de_pc_via_uno\NexusAdmin\servidor\server.js --scriptoptions= --log "NexusAdminServer wrapper" --grow 0.5 --wait 2 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2026-09-14 07:51:05 - Started 6648

@@ -136,9 +136,37 @@ def get_os_info():
     except Exception:
         return "N/A"
 
+def get_logged_in_user():
+    import csv
+    try:
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        
+        output = subprocess.check_output(
+            ["tasklist", "/V", "/FI", "IMAGENAME eq explorer.exe", "/FO", "CSV"],
+            stderr=subprocess.STDOUT, 
+            startupinfo=startupinfo,
+            creationflags=0x08000000,
+            encoding='oem', errors='replace'
+        )
+        lines = [line.strip() for line in output.split('\n') if line.strip()]
+        if len(lines) > 1:
+            reader = csv.reader(lines)
+            next(reader)
+            for row in reader:
+                if len(row) > 6:
+                    user = row[6]
+                    if user and user.upper() not in ["N/A", "SYSTEM", ""]:
+                        return user
+        return "N/A"
+    except Exception:
+        return "N/A"
+
 def collect_data():
     hostname = get_hostname()
-    user = run_wmic_query(["wmic", "computersystem", "get", "username"])
+    user = get_logged_in_user()
+    if user == "N/A":
+        user = run_wmic_query(["wmic", "computersystem", "get", "username"])
     ip = get_local_ip()
     cpu = run_wmic_query(["wmic", "cpu", "get", "name"])
     gpu = run_wmic_query(["wmic", "path", "win32_VideoController", "get", "name"])
@@ -183,9 +211,30 @@ def registrar_async():
     try:
         dados = collect_data()
         sio.emit('registrar_hardware', dados)
-        print("[+] Dados atualizados enviados!")
+        print("[+] Dados completos enviados!")
     except Exception as e:
-        print("Erro ao coletar dados:", e)
+        print("Erro ao coletar dados completos:", e)
+
+def atualizar_dinamico_loop():
+    # Loop que roda a cada 60 segundos para atualizar apenas Usuário e IP
+    # Evita rodar os comandos pesados de hardware (wmic cpu, placa mãe, etc)
+    while True:
+        time.sleep(60)
+        if sio.connected:
+            try:
+                user = get_logged_in_user()
+                if user == "N/A":
+                    user = run_wmic_query(["wmic", "computersystem", "get", "username"])
+                
+                dados_leves = {
+                    "hostname": get_hostname(),
+                    "user": user,
+                    "ip": get_local_ip()
+                }
+                sio.emit('registrar_hardware', dados_leves)
+                print("[+] Dados de Usuário/IP atualizados!")
+            except Exception as e:
+                pass
 
 @sio.event
 def connect():
@@ -318,11 +367,14 @@ def verificar_instalar_meshagent(server_url):
 
 def main():
     # ATENÇÃO: Substitua 10.0.2.204 pelo IP real do seu servidor se ele for diferente!
-    server_url = "http://10.0.2.204:5018"
+    server_url = "http://10.0.1.116:5018"
     
     # Executa a rotina do MeshCentral assim que o agente iniciar
     verificar_instalar_meshagent(server_url)
     
+    # Inicia a thread que vai ficar checando o usuário a cada 1 minuto
+    threading.Thread(target=atualizar_dinamico_loop, daemon=True).start()
+
     print(f"Tentando conectar ao servidor em {server_url}...")
     
     while True:

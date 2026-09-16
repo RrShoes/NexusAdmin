@@ -62,7 +62,7 @@ const computadores = {};
 const socketToHostname = {};
 
 async function getMeshCentralNodes() {
-  const dbPath = 'C:\\Users\\joao.victor\\Desktop\\Projetos\\MeshCentral\\meshcentral-data\\meshcentral.db';
+  const dbPath = 'C:\\Aplicacoes\\Centro_de_monitoramento_de_pc_via_uno\\MeshCentral\\meshcentral-data\\meshcentral.db';
   const nodes = {};
   if (!fs.existsSync(dbPath)) return nodes;
   
