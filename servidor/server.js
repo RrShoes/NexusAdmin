@@ -41,6 +41,33 @@ const db = new sqlite3.Database(path.join(__dirname, 'database.sqlite'), (err) =
       hostname TEXT PRIMARY KEY,
       setor_id INTEGER
     )`);
+    db.run(`CREATE TABLE IF NOT EXISTS inventario (
+      hostname TEXT PRIMARY KEY,
+      user TEXT,
+      ip TEXT,
+      os TEXT,
+      chassis TEXT,
+      cpu TEXT,
+      gpu TEXT,
+      monitor TEXT,
+      motherboard TEXT,
+      disk TEXT,
+      ram TEXT,
+      status TEXT,
+      ultimaVez TEXT
+    )`, (err) => {
+      if (!err) {
+        // Após criar a tabela, carrega os dados para a memória
+        db.all('SELECT * FROM inventario', [], (err, rows) => {
+          if (err) return console.error('Erro ao carregar inventário:', err);
+          rows.forEach(row => {
+            row.status = 'offline'; // Inicialmente todos estão offline até se conectarem
+            computadores[row.hostname] = row;
+          });
+          console.log(`[+] Carregados ${rows.length} computadores do banco de dados.`);
+        });
+      }
+    });
   }
 });
 
@@ -124,6 +151,21 @@ io.on('connection', (socket) => {
     };
     socketToHostname[socket.id] = hostname;
     
+    // Atualiza o banco de dados
+    const pc = computadores[hostname];
+    db.run(`INSERT INTO inventario (hostname, user, ip, os, chassis, cpu, gpu, monitor, motherboard, disk, ram, status, ultimaVez)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(hostname) DO UPDATE SET
+            user=excluded.user, ip=excluded.ip, os=excluded.os, chassis=excluded.chassis, cpu=excluded.cpu,
+            gpu=excluded.gpu, monitor=excluded.monitor, motherboard=excluded.motherboard, disk=excluded.disk,
+            ram=excluded.ram, status=excluded.status, ultimaVez=excluded.ultimaVez`,
+      [
+        pc.hostname, pc.user || '', pc.ip || '', pc.os || '', pc.chassis || '', 
+        pc.cpu || '', pc.gpu || '', pc.monitor || '', pc.motherboard || '', 
+        pc.disk || '', pc.ram || '', pc.status, pc.ultimaVez
+      ]
+    );
+
     console.log(`[+] Máquina registrada/online: ${hostname} (${data.ip})`);
     
     // Emite para o frontend a lista atualizada
@@ -146,6 +188,13 @@ io.on('connection', (socket) => {
     if (hostname && computadores[hostname]) {
       computadores[hostname].status = 'offline';
       delete socketToHostname[socket.id];
+
+      // Atualiza o banco de dados para refletir o status offline
+      const pc = computadores[hostname];
+      db.run(`UPDATE inventario SET status = ?, ultimaVez = ? WHERE hostname = ?`,
+        [pc.status, pc.ultimaVez, pc.hostname]
+      );
+
       // Atualiza o frontend para mostrar que a máquina ficou offline
       enviarListaPcsAtualizada(io);
     }
@@ -155,6 +204,17 @@ io.on('connection', (socket) => {
   socket.on('criar_setor', (data) => {
     db.run('INSERT INTO setores (nome, icone) VALUES (?, ?)', [data.nome, data.icone], function(err) {
       if (err) return console.error(err);
+      broadcastSetores();
+    });
+  });
+
+  // Evento: editar_setor
+  socket.on('editar_setor', (data) => {
+    const { id, nome, icone } = data;
+    if (!id || !nome) return;
+    db.run('UPDATE setores SET nome = ?, icone = ? WHERE id = ?', [nome.trim(), icone ? icone.trim() : '🗂️', id], function(err) {
+      if (err) return console.error('Erro ao editar setor:', err);
+      console.log(`[+] Setor ${id} editado: ${nome} (${icone})`);
       broadcastSetores();
     });
   });

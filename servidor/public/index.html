@@ -61,29 +61,33 @@
             <!-- VIEW: HOME -->
             <div class="view active" id="view-home">
                 <div class="cards-grid">
-                    <div class="card">
+                    <div class="card" onclick="abrirModalMaquinas('todos')" title="Clique para visualizar todas as máquinas registradas">
                         <div class="card-icon">🖥️</div>
                         <div class="card-label">Total de Máquinas</div>
                         <div class="card-value color-blue" id="card-total">0</div>
                         <div class="card-sub">Registradas no sistema</div>
+                        <div class="card-hint">Visualizar máquinas ↗</div>
                     </div>
-                    <div class="card">
+                    <div class="card" onclick="abrirModalMaquinas('online')" title="Clique para visualizar máquinas online">
                         <div class="card-icon">🟢</div>
                         <div class="card-label">Online Agora</div>
                         <div class="card-value color-green" id="card-online">0</div>
                         <div class="card-sub">Agentes ativos</div>
+                        <div class="card-hint">Visualizar online ↗</div>
                     </div>
-                    <div class="card">
+                    <div class="card" onclick="abrirModalMaquinas('offline')" title="Clique para visualizar máquinas offline">
                         <div class="card-icon">🔴</div>
                         <div class="card-label">Offline</div>
                         <div class="card-value color-red" id="card-offline">0</div>
                         <div class="card-sub">Sem resposta</div>
+                        <div class="card-hint">Visualizar offline ↗</div>
                     </div>
-                    <div class="card">
+                    <div class="card" onclick="abrirModalVisualizarSetores()" title="Clique para visualizar e gerenciar setores">
                         <div class="card-icon">🗂️</div>
                         <div class="card-label">Setores</div>
                         <div class="card-value color-purple" id="card-setores">0</div>
                         <div class="card-sub">Cadastrados</div>
+                        <div class="card-hint">Visualizar / Editar setores ↗</div>
                     </div>
                 </div>
 
@@ -203,6 +207,133 @@
         </div>
     </div>
 
+    <!-- Modal Visualizar Máquinas (Registradas / Online / Offline) -->
+    <div class="modal-overlay" id="modal-maquinas">
+        <div class="modal modal-large">
+            <div class="modal-header-flex">
+                <div>
+                    <h2 id="modal-maquinas-title">🖥️ Máquinas Registradas</h2>
+                    <div class="modal-header-sub" id="modal-maquinas-sub">Visualizando todas as máquinas cadastradas no sistema</div>
+                </div>
+                <button class="btn-close-modal" onclick="fecharModalMaquinas()" title="Fechar">&times;</button>
+            </div>
+
+            <div class="modal-toolbar">
+                <div class="modal-tab-group">
+                    <button class="modal-tab-btn active" id="tab-modal-todos" onclick="setModalMaquinasFiltro('todos')">
+                        🖥️ Todas (<span id="modal-count-todos">0</span>)
+                    </button>
+                    <button class="modal-tab-btn" id="tab-modal-online" onclick="setModalMaquinasFiltro('online')">
+                        🟢 Online (<span id="modal-count-online">0</span>)
+                    </button>
+                    <button class="modal-tab-btn" id="tab-modal-offline" onclick="setModalMaquinasFiltro('offline')">
+                        🔴 Offline (<span id="modal-count-offline">0</span>)
+                    </button>
+                </div>
+
+                <div class="modal-filter-row">
+                    <div class="modal-search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="modal-maquinas-search" placeholder="Buscar por Nome, Usuário, IP, SO..." oninput="renderModalMaquinas()">
+                    </div>
+                    <select class="modal-select-filter" id="modal-maquinas-filter-setor" onchange="renderModalMaquinas()">
+                        <option value="">Todos os Setores</option>
+                    </select>
+                    <button class="btn-export-excel" onclick="exportarRelatorioExcel()" title="Baixar relatório do inventário em Excel">
+                        📊 Baixar Excel
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-body-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 70px; text-align: center;">Status</th>
+                            <th>Nome do PC</th>
+                            <th>Usuário</th>
+                            <th>IP</th>
+                            <th>Tipo</th>
+                            <th>Setor</th>
+                            <th>Sistema Operacional</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="modal-maquinas-tbody">
+                        <tr><td colspan="8" class="empty-message">Aguardando conexão de agentes...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer-flex">
+                <div>Mostrando <strong id="modal-maquinas-contador">0</strong> máquina(s)</div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-export-excel" onclick="exportarRelatorioExcel()" title="Baixar relatório do inventário em Excel">📊 Baixar Relatório Excel</button>
+                    <button class="btn-toggle" onclick="fecharModalMaquinas(); switchView('monitoring');">Ir para Monitoramento ↗</button>
+                    <button class="btn-cancel" onclick="fecharModalMaquinas()">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Visualizar Setores -->
+    <div class="modal-overlay" id="modal-visualizar-setores">
+        <div class="modal modal-large">
+            <div class="modal-header-flex">
+                <div>
+                    <h2>🗂️ Setores Cadastrados (<span id="modal-setores-count">0</span>)</h2>
+                    <div class="modal-header-sub">Gerencie e visualize departamentos e as máquinas alocadas</div>
+                </div>
+                <button class="btn-close-modal" onclick="fecharModalVisualizarSetores()" title="Fechar">&times;</button>
+            </div>
+
+            <div class="modal-toolbar">
+                <div class="modal-search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="modal-setores-search" placeholder="Filtrar setores pelo nome..." oninput="renderModalVisualizarSetores()">
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-toggle" onclick="abrirModalConfigSetores()">⚙️ Configurar Máquinas</button>
+                    <button class="btn-primary" onclick="abrirModalSetor()">➕ Novo Setor</button>
+                </div>
+            </div>
+
+            <div class="modal-body-scroll" style="background: var(--bg-secondary); padding: 8px;">
+                <div id="modal-setores-cards-container" class="modal-setores-grid">
+                    <!-- Cards de setores gerados via JS -->
+                </div>
+            </div>
+
+            <div class="modal-footer-flex">
+                <div id="modal-setores-footer-info">Total de setores: 0</div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-toggle" onclick="fecharModalVisualizarSetores(); switchView('setores');">Ir para página de Setores ↗</button>
+                    <button class="btn-cancel" onclick="fecharModalVisualizarSetores()">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Setor -->
+    <div class="modal-overlay" id="modal-editar-setor">
+        <div class="modal">
+            <h2>✏️ Editar Setor</h2>
+            <input type="hidden" id="input-editar-setor-id" />
+            <div class="form-group">
+                <label>Nome do Setor</label>
+                <input type="text" id="input-editar-setor-nome" placeholder="Ex: Financeiro, TI, RH..." />
+            </div>
+            <div class="form-group">
+                <label>Ícone (emoji)</label>
+                <input type="text" id="input-editar-setor-icone" placeholder="Ex: 💼 🖥️ 📊" maxlength="4" />
+            </div>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="fecharModalEditarSetor()">Cancelar</button>
+                <button class="btn-confirm" onclick="salvarEdicaoSetor()">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -220,6 +351,12 @@
             renderHomeCards();
             renderHomeDevices();
             renderSetores();
+            if (document.getElementById('modal-maquinas').classList.contains('open')) {
+                renderModalMaquinas();
+            }
+            if (document.getElementById('modal-visualizar-setores').classList.contains('open')) {
+                renderModalVisualizarSetores();
+            }
         });
 
         socket.on('atualizar_setores', (data) => {
@@ -227,6 +364,13 @@
             designacoesSetores = data.designacoes;
             renderSetores();
             renderHomeCards();
+            popularSelectSetoresModal();
+            if (document.getElementById('modal-visualizar-setores').classList.contains('open')) {
+                renderModalVisualizarSetores();
+            }
+            if (document.getElementById('modal-maquinas').classList.contains('open')) {
+                renderModalMaquinas();
+            }
         });
 
         // ── NAVEGAÇÃO ──
@@ -423,7 +567,8 @@
                             ${listaMaquinasHTML}
                         </div>
 
-                        <div style="margin-top: auto;">
+                        <div style="margin-top: auto; display: flex; gap: 8px;">
+                            <button class="btn-toggle" style="font-size:0.75rem;padding:5px 10px;" onclick="abrirModalEditarSetor(${s.id}, '${(s.nome||'').replace(/'/g, "\\'")}', '${(s.icone||'🗂️').replace(/'/g, "\\'")}')">✏️ Editar</button>
                             <button class="btn-danger" style="font-size:0.75rem;padding:5px 10px;" onclick="removerSetor(${s.id})">Remover Setor</button>
                         </div>
                     </div>
@@ -545,6 +690,359 @@
             document.getElementById('modal-detalhes-pc').classList.remove('open');
         }
 
+        // ── FILTROS E FUNÇÕES DO MODAL DE MÁQUINAS ──
+        let modalMaquinasFiltro = 'todos'; // 'todos' | 'online' | 'offline'
+
+        function abrirModalMaquinas(filtro = 'todos') {
+            modalMaquinasFiltro = filtro;
+            const searchInput = document.getElementById('modal-maquinas-search');
+            if (searchInput) searchInput.value = '';
+            
+            popularSelectSetoresModal();
+            atualizarAbasModalMaquinas();
+            renderModalMaquinas();
+            
+            document.getElementById('modal-maquinas').classList.add('open');
+        }
+
+        function fecharModalMaquinas() {
+            document.getElementById('modal-maquinas').classList.remove('open');
+        }
+
+        function setModalMaquinasFiltro(filtro) {
+            modalMaquinasFiltro = filtro;
+            atualizarAbasModalMaquinas();
+            renderModalMaquinas();
+        }
+
+        function atualizarAbasModalMaquinas() {
+            const tabs = ['todos', 'online', 'offline'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tab-modal-' + t);
+                if (btn) {
+                    if (t === modalMaquinasFiltro) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                }
+            });
+
+            const titulosModal = {
+                todos: ['🖥️ Máquinas Registradas', 'Visualizando todos os dispositivos cadastrados no sistema'],
+                online: ['🟢 Máquinas Online Agora', 'Dispositivos ativos e conectados em tempo real'],
+                offline: ['🔴 Máquinas Offline', 'Dispositivos sem resposta do agente de monitoramento']
+            };
+
+            const info = titulosModal[modalMaquinasFiltro] || titulosModal.todos;
+            document.getElementById('modal-maquinas-title').innerText = info[0];
+            document.getElementById('modal-maquinas-sub').innerText = info[1];
+        }
+
+        function popularSelectSetoresModal() {
+            const sel = document.getElementById('modal-maquinas-filter-setor');
+            if (!sel) return;
+            const valAtual = sel.value;
+            let html = '<option value="">Todos os Setores</option>';
+            html += '<option value="__sem_setor__">Sem Setor Designado</option>';
+            setores.forEach(s => {
+                html += `<option value="${s.id}">${s.icone || '🗂️'} ${s.nome}</option>`;
+            });
+            sel.innerHTML = html;
+            sel.value = valAtual;
+        }
+
+        function renderModalMaquinas() {
+            const tbody = document.getElementById('modal-maquinas-tbody');
+            if (!tbody) return;
+
+            const searchInput = document.getElementById('modal-maquinas-search');
+            const termo = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const setorSel = document.getElementById('modal-maquinas-filter-setor');
+            const setorFiltro = setorSel ? setorSel.value : '';
+
+            // Contadores das abas
+            const totalGeral = todosComputadores.length;
+            const onlineGeral = todosComputadores.filter(p => p.status === 'online').length;
+            const offlineGeral = totalGeral - onlineGeral;
+
+            const countTodosEl = document.getElementById('modal-count-todos');
+            const countOnlineEl = document.getElementById('modal-count-online');
+            const countOfflineEl = document.getElementById('modal-count-offline');
+            if (countTodosEl) countTodosEl.innerText = totalGeral;
+            if (countOnlineEl) countOnlineEl.innerText = onlineGeral;
+            if (countOfflineEl) countOfflineEl.innerText = offlineGeral;
+
+            // Filtragem
+            let filtrados = todosComputadores.slice();
+
+            // Filtro por status
+            if (modalMaquinasFiltro === 'online') {
+                filtrados = filtrados.filter(p => p.status === 'online');
+            } else if (modalMaquinasFiltro === 'offline') {
+                filtrados = filtrados.filter(p => p.status !== 'online');
+            }
+
+            // Filtro por setor
+            if (setorFiltro === '__sem_setor__') {
+                filtrados = filtrados.filter(p => !designacoesSetores[p.hostname]);
+            } else if (setorFiltro) {
+                filtrados = filtrados.filter(p => designacoesSetores[p.hostname] === parseInt(setorFiltro));
+            }
+
+            // Filtro por texto de busca
+            if (termo) {
+                filtrados = filtrados.filter(pc => {
+                    const setorId = designacoesSetores[pc.hostname];
+                    const setorObj = setores.find(s => s.id === setorId);
+                    const nomeSetor = setorObj ? setorObj.nome.toLowerCase() : '';
+                    return (
+                        (pc.hostname && pc.hostname.toLowerCase().includes(termo)) ||
+                        (pc.user && pc.user.toLowerCase().includes(termo)) ||
+                        (pc.ip && pc.ip.toLowerCase().includes(termo)) ||
+                        (pc.os && pc.os.toLowerCase().includes(termo)) ||
+                        (pc.chassis && pc.chassis.toLowerCase().includes(termo)) ||
+                        nomeSetor.includes(termo)
+                    );
+                });
+            }
+
+            const contadorEl = document.getElementById('modal-maquinas-contador');
+            if (contadorEl) contadorEl.innerText = filtrados.length;
+
+            if (filtrados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-message">Nenhuma máquina encontrada para os filtros selecionados.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtrados.map(pc => {
+                const isOnline = pc.status === 'online';
+                const statusDot = isOnline
+                    ? '<span style="color:#10b981;font-size:22px;text-shadow:0 0 5px #10b981;display:inline-block;" title="Online">●</span>'
+                    : '<span style="color:#ef4444;font-size:22px;display:inline-block;" title="Offline">●</span>';
+
+                const setorId = designacoesSetores[pc.hostname];
+                const setorObj = setores.find(s => s.id === setorId);
+                const setorBadge = setorObj
+                    ? `<span class="setor-badge">${setorObj.icone || '🗂️'} ${setorObj.nome}</span>`
+                    : '<span class="setor-badge unassigned">Sem Setor</span>';
+
+                const userClean = pc.user ? pc.user.replace(/.*\\\\/, '') : 'N/A';
+                const osClean = pc.os ? pc.os.split(' ').slice(0, 3).join(' ') : 'N/A';
+
+                return `
+                    <tr>
+                        <td style="text-align: center; vertical-align: middle;">${statusDot}</td>
+                        <td>
+                            <strong style="color:var(--text-main); font-size:0.95rem;">${pc.hostname || 'Desconhecido'}</strong>
+                        </td>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <span>👤</span> <span>${userClean}</span>
+                            </div>
+                        </td>
+                        <td><code style="background:#F1F5F9; padding:2px 6px; border-radius:4px; font-size:0.8rem;">${pc.ip || 'N/A'}</code></td>
+                        <td><span style="font-size:0.82rem; color:var(--text-muted);">${pc.chassis || 'N/A'}</span></td>
+                        <td>${setorBadge}</td>
+                        <td><span style="font-size:0.82rem; color:var(--text-muted);">${osClean}</span></td>
+                        <td>
+                            <div class="action-buttons" style="display:flex; gap:6px; align-items:center;">
+                                <button class="btn-toggle" style="font-size:0.75rem; padding:5px 10px;" onclick="abrirDetalhesPC('${pc.hostname}')" title="Ver especificações completas">👁️ Detalhes</button>
+                                ${pc.meshNodeId ? `
+                                    <a href="https://10.0.1.116/?viewmode=11&gotonode=${pc.meshNodeId}" target="_blank" style="text-decoration:none;">
+                                        <button class="btn-primary" style="font-size:0.75rem; padding:5px 10px;">Remoto</button>
+                                    </a>
+                                ` : ''}
+                                ${isOnline ? `
+                                    <button class="btn-warning" style="font-size:0.75rem; padding:5px 8px;" onclick="solicitarAcao('${pc.id}', 'reiniciar')" title="Reiniciar PC">🔄</button>
+                                    <button class="btn-danger" style="font-size:0.75rem; padding:5px 8px;" onclick="solicitarAcao('${pc.id}', 'desligar')" title="Desligar PC">⏻</button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ── MODAL VISUALIZAR SETORES ──
+        function abrirModalVisualizarSetores() {
+            const searchInput = document.getElementById('modal-setores-search');
+            if (searchInput) searchInput.value = '';
+            renderModalVisualizarSetores();
+            document.getElementById('modal-visualizar-setores').classList.add('open');
+        }
+
+        function fecharModalVisualizarSetores() {
+            document.getElementById('modal-visualizar-setores').classList.remove('open');
+        }
+
+        function renderModalVisualizarSetores() {
+            const container = document.getElementById('modal-setores-cards-container');
+            if (!container) return;
+
+            const searchInput = document.getElementById('modal-setores-search');
+            const termo = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+            const countEl = document.getElementById('modal-setores-count');
+            if (countEl) countEl.innerText = setores.length;
+
+            const footerInfo = document.getElementById('modal-setores-footer-info');
+            if (footerInfo) {
+                const maquinasComSetor = todosComputadores.filter(pc => designacoesSetores[pc.hostname]).length;
+                footerInfo.innerText = `${setores.length} setores cadastrados • ${maquinasComSetor} de ${todosComputadores.length} máquinas vinculadas`;
+            }
+
+            let setoresFiltrados = setores.slice();
+            if (termo) {
+                setoresFiltrados = setoresFiltrados.filter(s => s.nome.toLowerCase().includes(termo));
+            }
+
+            if (setores.length === 0) {
+                container.innerHTML = `
+                    <div class="setor-empty" style="grid-column: 1 / -1; padding: 40px 20px;">
+                        <div class="setor-empty-icon">🗂️</div>
+                        <div class="setor-empty-title">Nenhum setor cadastrado</div>
+                        <div class="setor-empty-sub">Crie setores para organizar as máquinas da sua rede</div>
+                        <button class="btn-add-setor" onclick="abrirModalSetor()">+ Criar primeiro setor</button>
+                    </div>`;
+                return;
+            }
+
+            if (setoresFiltrados.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted);">
+                        Nenhum setor encontrado para "${termo}".
+                    </div>`;
+                return;
+            }
+
+            let html = setoresFiltrados.map(s => {
+                const maquinasDoSetor = todosComputadores.filter(pc => designacoesSetores[pc.hostname] === s.id);
+                const totalM = maquinasDoSetor.length;
+                const onlineM = maquinasDoSetor.filter(pc => pc.status === 'online').length;
+                const offlineM = totalM - onlineM;
+
+                const listaHTML = maquinasDoSetor.length > 0 ? maquinasDoSetor.map(pc => {
+                    const isOnline = pc.status === 'online';
+                    const dotColor = isOnline ? '#10B981' : '#EF4444';
+                    const userClean = pc.user ? pc.user.replace(/.*\\\\/, '') : 'N/A';
+                    return `
+                        <div class="modal-setor-machine-item" onclick="abrirDetalhesPC('${pc.hostname}')" title="Clique para ver detalhes de ${pc.hostname}">
+                            <div style="display:flex; align-items:center; gap:8px; overflow:hidden;">
+                                <span style="color:${dotColor}; font-size:12px;">●</span>
+                                <strong style="color:var(--text-main); font-size:0.82rem; white-space:nowrap;">${pc.hostname}</strong>
+                                <span style="color:var(--text-muted); font-size:0.75rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">(${userClean})</span>
+                            </div>
+                            <span style="color:var(--text-dim); font-size:0.75rem; font-family:monospace;">${pc.ip || ''}</span>
+                        </div>
+                    `;
+                }).join('') : '<div style="color:var(--text-muted); font-size:0.78rem; text-align:center; padding:12px;">Nenhuma máquina vinculada</div>';
+
+                const safeNome = (s.nome || '').replace(/'/g, "\\'");
+                const safeIcone = (s.icone || '🗂️').replace(/'/g, "\\'");
+
+                return `
+                    <div class="modal-setor-card">
+                        <div class="modal-setor-card-header">
+                            <div class="modal-setor-title-wrap">
+                                <div class="modal-setor-icon">${s.icone || '🗂️'}</div>
+                                <div>
+                                    <div class="modal-setor-info-name">${s.nome}</div>
+                                    <div class="modal-setor-info-stats">
+                                        <strong>${totalM}</strong> máquinas (${onlineM} <span style="color:#10B981;">●</span> / ${offlineM} <span style="color:#EF4444;">●</span>)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-setor-actions">
+                                <button class="btn-toggle" style="font-size:0.75rem; padding:6px 10px;" onclick="abrirModalEditarSetor(${s.id}, '${safeNome}', '${safeIcone}')" title="Editar nome e ícone">✏️ Editar</button>
+                                <button class="btn-danger" style="font-size:0.75rem; padding:6px 10px;" onclick="removerSetor(${s.id})" title="Excluir setor">🗑️</button>
+                            </div>
+                        </div>
+
+                        <div class="modal-setor-machines-box">
+                            ${listaHTML}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Card extra para máquinas sem setor (se houver e não houver busca restrita)
+            if (!termo) {
+                const maquinasSemSetor = todosComputadores.filter(pc => !designacoesSetores[pc.hostname]);
+                if (maquinasSemSetor.length > 0) {
+                    const onlineSem = maquinasSemSetor.filter(pc => pc.status === 'online').length;
+                    const offlineSem = maquinasSemSetor.length - onlineSem;
+                    const listaSemHTML = maquinasSemSetor.map(pc => {
+                        const isOnline = pc.status === 'online';
+                        const dotColor = isOnline ? '#10B981' : '#EF4444';
+                        const userClean = pc.user ? pc.user.replace(/.*\\\\/, '') : 'N/A';
+                        return `
+                            <div class="modal-setor-machine-item" onclick="abrirDetalhesPC('${pc.hostname}')" title="Clique para ver detalhes de ${pc.hostname}">
+                                <div style="display:flex; align-items:center; gap:8px; overflow:hidden;">
+                                    <span style="color:${dotColor}; font-size:12px;">●</span>
+                                    <strong style="color:var(--text-main); font-size:0.82rem; white-space:nowrap;">${pc.hostname}</strong>
+                                    <span style="color:var(--text-muted); font-size:0.75rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">(${userClean})</span>
+                                </div>
+                                <span style="color:var(--text-dim); font-size:0.75rem; font-family:monospace;">${pc.ip || ''}</span>
+                            </div>
+                        `;
+                    }).join('');
+
+                    html += `
+                        <div class="modal-setor-card" style="border-style: dashed; background: #FAFAFA;">
+                            <div class="modal-setor-card-header">
+                                <div class="modal-setor-title-wrap">
+                                    <div class="modal-setor-icon" style="background:#FFF;">⚠️</div>
+                                    <div>
+                                        <div class="modal-setor-info-name">Sem Setor Designado</div>
+                                        <div class="modal-setor-info-stats">
+                                            <strong>${maquinasSemSetor.length}</strong> máquinas (${onlineSem} <span style="color:#10B981;">●</span> / ${offlineSem} <span style="color:#EF4444;">●</span>)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn-primary" style="font-size:0.75rem; padding:6px 12px;" onclick="abrirModalConfigSetores()">⚙️ Vincular</button>
+                                </div>
+                            </div>
+                            <div class="modal-setor-machines-box" style="background:#FFFFFF;">
+                                ${listaSemHTML}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            container.innerHTML = html;
+        }
+
+        // ── MODAL EDITAR SETOR ──
+        function abrirModalEditarSetor(id, nome, icone) {
+            document.getElementById('input-editar-setor-id').value = id;
+            document.getElementById('input-editar-setor-nome').value = nome || '';
+            document.getElementById('input-editar-setor-icone').value = icone || '🗂️';
+            document.getElementById('modal-editar-setor').classList.add('open');
+            document.getElementById('input-editar-setor-nome').focus();
+        }
+
+        function fecharModalEditarSetor() {
+            document.getElementById('modal-editar-setor').classList.remove('open');
+            document.getElementById('input-editar-setor-id').value = '';
+            document.getElementById('input-editar-setor-nome').value = '';
+            document.getElementById('input-editar-setor-icone').value = '';
+        }
+
+        function salvarEdicaoSetor() {
+            const id = document.getElementById('input-editar-setor-id').value;
+            const nome = document.getElementById('input-editar-setor-nome').value.trim();
+            const icone = document.getElementById('input-editar-setor-icone').value.trim() || '🗂️';
+            if (!id || !nome) {
+                alert('Por favor, informe o nome do setor.');
+                return;
+            }
+            socket.emit('editar_setor', { id: parseInt(id), nome, icone });
+            fecharModalEditarSetor();
+        }
+
         // Fechar modal clicando fora
         document.getElementById('modal-setor').addEventListener('click', function(e) {
             if (e.target === this) fecharModalSetor();
@@ -555,35 +1053,153 @@
         document.getElementById('modal-detalhes-pc').addEventListener('click', function(e) {
             if (e.target === this) fecharModalDetalhesPC();
         });
+        document.getElementById('modal-maquinas').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalMaquinas();
+        });
+        document.getElementById('modal-visualizar-setores').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalVisualizarSetores();
+        });
+        document.getElementById('modal-editar-setor').addEventListener('click', function(e) {
+            if (e.target === this) fecharModalEditarSetor();
+        });
 
-        // ── EXPORTAR EXCEL ──
-        function exportarParaExcel() {
+        // Fechar com a tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (document.getElementById('modal-editar-setor').classList.contains('open')) fecharModalEditarSetor();
+                else if (document.getElementById('modal-setor').classList.contains('open')) fecharModalSetor();
+                else if (document.getElementById('modal-config-setores').classList.contains('open')) fecharModalConfigSetores();
+                else if (document.getElementById('modal-detalhes-pc').classList.contains('open')) fecharModalDetalhesPC();
+                else if (document.getElementById('modal-maquinas').classList.contains('open')) fecharModalMaquinas();
+                else if (document.getElementById('modal-visualizar-setores').classList.contains('open')) fecharModalVisualizarSetores();
+            }
+        });
+
+        // Suporte a pressionar Enter nos formulários de criação/edição de setor
+        document.getElementById('input-setor-nome').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') salvarSetor();
+        });
+        document.getElementById('input-setor-icone').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') salvarSetor();
+        });
+        document.getElementById('input-editar-setor-nome').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') salvarEdicaoSetor();
+        });
+        document.getElementById('input-editar-setor-icone').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') salvarEdicaoSetor();
+        });
+
+        // ── EXPORTAR RELATÓRIO DO INVENTÁRIO EM EXCEL ──
+        function exportarRelatorioExcel() {
             if (todosComputadores.length === 0) {
-                alert("Não há dados para exportar.");
+                alert("Não há dados de computadores para exportar.");
                 return;
             }
-            
-            const dados = todosComputadores.map(pc => ({
-                'Status': pc.status === 'online' ? 'Online' : 'Offline',
-                'Usuário': pc.user ? pc.user.replace(/.*\\\\/, '') : 'N/A',
-                'Nome PC': pc.hostname || 'Desconhecido',
-                'Tipo': pc.chassis || 'N/A',
-                'IP': pc.ip || 'N/A',
-                'Sistema Operacional': pc.os || 'N/A',
-                'Processador': pc.cpu || 'N/A',
-                'Placa de Vídeo': pc.gpu || 'N/A',
-                'Monitor': pc.monitor || 'N/A',
-                'Memória RAM': pc.ram || 'N/A',
-                'Placa-Mãe': pc.motherboard || 'N/A',
-                'Armazenamento': pc.disk || 'N/A'
-            }));
+
+            const searchInput = document.getElementById('modal-maquinas-search');
+            const termo = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const setorSel = document.getElementById('modal-maquinas-filter-setor');
+            const setorFiltro = setorSel ? setorSel.value : '';
+
+            let listaParaExportar = todosComputadores.slice();
+            const modalAberto = document.getElementById('modal-maquinas').classList.contains('open');
+
+            // Se o modal de máquinas estiver aberto, respeita o filtro de aba (Todos/Online/Offline), setor e busca
+            let sufixoFiltro = '';
+            if (modalAberto) {
+                if (modalMaquinasFiltro === 'online') {
+                    listaParaExportar = listaParaExportar.filter(p => p.status === 'online');
+                    sufixoFiltro = '_Online';
+                } else if (modalMaquinasFiltro === 'offline') {
+                    listaParaExportar = listaParaExportar.filter(p => p.status !== 'online');
+                    sufixoFiltro = '_Offline';
+                }
+
+                if (setorFiltro === '__sem_setor__') {
+                    listaParaExportar = listaParaExportar.filter(p => !designacoesSetores[p.hostname]);
+                    sufixoFiltro += '_SemSetor';
+                } else if (setorFiltro) {
+                    listaParaExportar = listaParaExportar.filter(p => designacoesSetores[p.hostname] === parseInt(setorFiltro));
+                    const sEncontrado = setores.find(s => s.id === parseInt(setorFiltro));
+                    if (sEncontrado) sufixoFiltro += `_${sEncontrado.nome.replace(/\s+/g, '_')}`;
+                }
+
+                if (termo) {
+                    listaParaExportar = listaParaExportar.filter(pc => {
+                        const sId = designacoesSetores[pc.hostname];
+                        const sObj = setores.find(s => s.id === sId);
+                        const nSetor = sObj ? sObj.nome.toLowerCase() : '';
+                        return (
+                            (pc.hostname && pc.hostname.toLowerCase().includes(termo)) ||
+                            (pc.user && pc.user.toLowerCase().includes(termo)) ||
+                            (pc.ip && pc.ip.toLowerCase().includes(termo)) ||
+                            (pc.os && pc.os.toLowerCase().includes(termo)) ||
+                            (pc.chassis && pc.chassis.toLowerCase().includes(termo)) ||
+                            nSetor.includes(termo)
+                        );
+                    });
+                }
+            }
+
+            if (listaParaExportar.length === 0) {
+                alert("Nenhuma máquina encontrada para os filtros selecionados.");
+                return;
+            }
+
+            const dados = listaParaExportar.map(pc => {
+                const sId = designacoesSetores[pc.hostname];
+                const sObj = setores.find(s => s.id === sId);
+                const nomeSetor = sObj ? `${sObj.icone || '🗂️'} ${sObj.nome}` : 'Sem Setor';
+
+                return {
+                    'Status': pc.status === 'online' ? 'Online' : 'Offline',
+                    'Nome do PC': pc.hostname || 'Desconhecido',
+                    'Setor': nomeSetor,
+                    'Usuário': pc.user ? pc.user.replace(/.*\\\\/, '') : 'N/A',
+                    'IP': pc.ip || 'N/A',
+                    'Tipo (Chassis)': pc.chassis || 'N/A',
+                    'Sistema Operacional': pc.os || 'N/A',
+                    'Processador (CPU)': pc.cpu || 'N/A',
+                    'Memória RAM': pc.ram || 'N/A',
+                    'Armazenamento (Disco)': pc.disk || 'N/A',
+                    'Placa de Vídeo (GPU)': pc.gpu || 'N/A',
+                    'Placa-Mãe': pc.motherboard || 'N/A',
+                    'Monitor': pc.monitor || 'N/A',
+                    'Última Atividade': pc.ultimaVez || 'N/A'
+                };
+            });
 
             const ws = XLSX.utils.json_to_sheet(dados);
+
+            // Largura ideal para cada coluna no Excel
+            ws['!cols'] = [
+                { wch: 12 }, // Status
+                { wch: 22 }, // Nome do PC
+                { wch: 20 }, // Setor
+                { wch: 24 }, // Usuário
+                { wch: 16 }, // IP
+                { wch: 15 }, // Tipo (Chassis)
+                { wch: 30 }, // Sistema Operacional
+                { wch: 34 }, // Processador
+                { wch: 18 }, // Memória RAM
+                { wch: 26 }, // Armazenamento
+                { wch: 26 }, // Placa de Vídeo
+                { wch: 26 }, // Placa-Mãe
+                { wch: 24 }, // Monitor
+                { wch: 22 }  // Última Atividade
+            ];
+
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Dispositivos");
-            
-            // Grava o arquivo como .xls
-            XLSX.writeFile(wb, "Monitoramento_Dispositivos.xls");
+            XLSX.utils.book_append_sheet(wb, ws, "Inventário");
+
+            const dataFormatada = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+            const nomeArquivo = `Inventario_NexusAdmin_${dataFormatada}${sufixoFiltro}.xlsx`;
+
+            XLSX.writeFile(wb, nomeArquivo);
+        }
+
+        function exportarParaExcel() {
+            exportarRelatorioExcel();
         }
 
         // Init
